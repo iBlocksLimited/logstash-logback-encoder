@@ -40,6 +40,8 @@ public class StackTraceJsonProvider extends AbstractFieldJsonProvider<ILoggingEv
      * for more customization options. 
      */
     private ThrowableHandlingConverter throwableConverter = new ExtendedThrowableProxyConverter();
+
+    private boolean throwableConverterReturnsJson = false;
     
     public StackTraceJsonProvider() {
         setFieldName(FIELD_STACK_TRACE);
@@ -60,8 +62,14 @@ public class StackTraceJsonProvider extends AbstractFieldJsonProvider<ILoggingEv
     @Override
     public void writeTo(JsonGenerator generator, ILoggingEvent event) throws IOException {
         IThrowableProxy throwableProxy = event.getThrowableProxy();
-        if (throwableProxy != null) {
-            JsonWritingUtils.writeStringField(generator, getFieldName(), throwableConverter.convert(event));
+        if (throwableProxy != null && JsonWritingUtils.shouldWriteField(getFieldName())) {
+            String convertedThrowable = throwableConverter.convert(event);
+            if (throwableConverterReturnsJson) {
+                generator.writeFieldName(getFieldName());
+                generator.writeRawValue(convertedThrowable);
+            } else {
+                JsonWritingUtils.writeStringField(generator, getFieldName(), throwableConverter.convert(event));
+            }
         }
     }
     
@@ -75,5 +83,13 @@ public class StackTraceJsonProvider extends AbstractFieldJsonProvider<ILoggingEv
     }
     public void setThrowableConverter(ThrowableHandlingConverter throwableConverter) {
         this.throwableConverter = throwableConverter;
+    }
+
+    public boolean getThrowableConverterReturnsJson() {
+        return this.throwableConverterReturnsJson;
+    }
+
+    public void setThrowableConverterReturnsJson(boolean returnsJson) {
+        this.throwableConverterReturnsJson = returnsJson;
     }
 }
