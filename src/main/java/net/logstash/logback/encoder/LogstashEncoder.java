@@ -178,6 +178,14 @@ public class LogstashEncoder extends LoggingEventCompositeJsonEncoder {
         getFormatter().setThrowableConverter(throwableConverter);
     }
 
+    public boolean getThrowableConverterReturnsJson() {
+        return getFormatter().getThrowableConverterReturnsJson();
+    }
+
+    public void setThrowableConverterReturnsJson(boolean returnsJson) {
+        getFormatter().setThrowableConverterReturnsJson(returnsJson);
+    }
+
     public String getTimeZone() {
         return getFormatter().getTimeZone();
     }
