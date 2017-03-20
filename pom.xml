@@ -19,7 +19,7 @@
     <scm>
         <connection>scm:git:git@github.com:logstash/logstash-logback-encoder.git</connection>
         <developerConnection>scm:git:git@github.com:logstash/logstash-logback-encoder.git</developerConnection>
-        <tag>logstash-logback-encoder-4.9</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <prerequisites>

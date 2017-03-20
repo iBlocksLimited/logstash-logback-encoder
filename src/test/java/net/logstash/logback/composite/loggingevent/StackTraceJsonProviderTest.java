@@ -93,4 +93,17 @@ public class StackTraceJsonProviderTest {
         verify(generator).writeStringField("newFieldName", "stack");
     }
 
+    @Test
+    public void testThrowableConverterReturnsJson() throws IOException {
+        when(converter.convert(event)).thenReturn("{\"json\":\"data\"}");
+        provider.setThrowableConverterReturnsJson(true);
+
+        when(event.getThrowableProxy()).thenReturn(ThrowableProxy);
+
+        provider.writeTo(generator, event);
+
+        verify(generator).writeFieldName(StackTraceJsonProvider.FIELD_STACK_TRACE);
+        verify(generator).writeRawValue("{\"json\":\"data\"}");
+    }
+
 }
